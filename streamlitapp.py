@@ -165,7 +165,7 @@ if uploaded_file is not None:
                     fig.update_layout(title={'text': 'EXPENDITURE ANALYSIS', 'x': 0.5, 'xanchor': 'center'},  width=900,
                                             xaxis_title='Category',
                                             yaxis_title='Amount',
-                                            xaxis=dict(tickfont=dict(size=7.5)),                                  
+                                            xaxis=dict(tickfont=dict(size=7.2)),                                  
                                             )
 
                     st.plotly_chart(fig)
