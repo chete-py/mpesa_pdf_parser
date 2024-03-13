@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 import re
 from local_components import card_container
 import streamlit_shadcn_ui as ui
+import base64
 
 st.set_page_config(page_icon="mpesa.jpg", page_title = 'Mpesa Statement Parser ', layout="wide")
 
@@ -148,7 +149,8 @@ if uploaded_file is not None:
 
     grouped = receipts.groupby('Usage')['Amount'].sum().reset_index()
     receipt_account = (receipts.groupby('Account Involved')['Amount'].sum().reset_index())
-    frequent_receipt_account = receipt_account.sort_values(by='Amount', ascending=False).reset_index(drop=True).head(10)
+    frequent_receipt_account = receipt_account.sort_values(by='Amount', ascending=False).reset_index(drop=True)
+    top_receipts = frequent_receipt_account.head(10)
 
 
     months_payments = payments.groupby('Month')['Amount'].sum().reset_index()
@@ -174,7 +176,8 @@ if uploaded_file is not None:
 
     
     payment_account = (payments.groupby('Account Involved')['Amount'].sum().reset_index())
-    frequent_payment_account = payment_account.sort_values(by='Amount', ascending=False).reset_index(drop=True).head(10)
+    frequent_payment_account = payment_account.sort_values(by='Amount', ascending=False).reset_index(drop=True)
+    top_payments =  frequent_payment_account.head(10)
 
 
     graph1 = receipts.groupby('Usage')['Amount'].sum().reset_index()
@@ -239,7 +242,13 @@ if uploaded_file is not None:
                     st.plotly_chart(fig)
                 
                 with tab5:
-                    st.table(frequent_receipt_account)
+                    st.table(top_receipts)
+
+                    if st.button("Download Receipt CSV"):
+                        csv_data = frequent_receipt_account.to_csv(index=False, encoding='utf-8')
+                        b64 = base64.b64encode(csv_data.encode()).decode()
+                        href = f'<a href="data:file/csv;base64,{b64}" download="top_receipts_mpesastatement.csv">Download CSV</a>'
+                        st.markdown(href, unsafe_allow_html=True)   
 
         
     
@@ -283,12 +292,25 @@ if uploaded_file is not None:
                     st.plotly_chart(fig2)
                 
                 with tab7:
-                    st.table(frequent_payment_account)   
+                    st.table(top_payments) 
+
+                    if st.button("Download Payment CSV"):
+                        csv_data = frequent_payment_account.to_csv(index=False, encoding='utf-8')
+                        b64 = base64.b64encode(csv_data.encode()).decode()
+                        href = f'<a href="data:file/csv;base64,{b64}" download="top_payments_mpesastatement.csv">Download CSV</a>'
+                        st.markdown(href, unsafe_allow_html=True)   
                 
 
         with tab3:
             
             st.table(finaldf)
+
+            # Add a button to download the filtered data as a CSV
+            if st.button("Download CSV"):
+                csv_data = finaldf.to_csv(index=False, encoding='utf-8')
+                b64 = base64.b64encode(csv_data.encode()).decode()
+                href = f'<a href="data:file/csv;base64,{b64}" download="mpesastatement.csv">Download CSV</a>'
+                st.markdown(href, unsafe_allow_html=True)  
         
 
 
