@@ -312,10 +312,7 @@ if uploaded_file is not None:
                 st.markdown(href, unsafe_allow_html=True)  
         
 
-
-
-
-
+st.empty()
 
 
 
