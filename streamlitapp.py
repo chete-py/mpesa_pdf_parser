@@ -221,7 +221,7 @@ if uploaded_file is not None:
                     fig = go.Figure()
 
                     fig.add_trace(go.Bar(
-                            width= 0.375,
+                            width= 0.35,
                             x = graph1['Usage'],
                             y= graph1['Amount'],   
                             name = 'Actual',
@@ -270,7 +270,7 @@ if uploaded_file is not None:
                     fig2 = go.Figure()
 
                     fig2.add_trace(go.Bar(
-                            width= 0.375,
+                            width= 0.35,
                             x = graph2['Usage'],
                             y= graph2['Amount'],   
                             name = 'Actual',
