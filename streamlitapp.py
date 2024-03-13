@@ -231,7 +231,7 @@ if uploaded_file is not None:
                     
                             
                     
-                    fig.update_layout(title={'text': 'RECEIPT ANALYSIS', 'x': 0.5, 'xanchor': 'center'},  width=900,
+                    fig.update_layout(title={'text': 'RECEIPT ANALYSIS', 'x': 0.5, 'xanchor': 'center'},  width=850,
                                             xaxis_title='Category',
                                             yaxis_title='Amount',
                                             xaxis=dict(tickfont=dict(size=9.2)),                                  
@@ -281,7 +281,7 @@ if uploaded_file is not None:
                     
                             
                     
-                    fig2.update_layout(title={'text': 'PAYMENT ANALYSIS', 'x': 0.5, 'xanchor': 'center'},  width=900,
+                    fig2.update_layout(title={'text': 'PAYMENT ANALYSIS', 'x': 0.5, 'xanchor': 'center'},  width=850,
                                             xaxis_title='Category',
                                             yaxis_title='Amount',
                                             xaxis=dict(tickfont=dict(size=9.2)),                                  
