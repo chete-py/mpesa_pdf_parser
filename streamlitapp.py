@@ -180,8 +180,8 @@ if uploaded_file is not None:
     top_payments =  frequent_payment_account.head(10)
 
 
-    graph1 = receipts.groupby('Usage')['Amount'].sum().sort_values(ascending=False).head(15).reset_index()
-    graph2 = payments.groupby('Usage')['Amount'].sum().reset_index()
+    graph1 = receipts.groupby('Usage')['Amount'].sum().sort_values(ascending=False).head(10).reset_index()
+    graph2 = payments.groupby('Usage')['Amount'].sum().sort_values(ascending=False).head(10).reset_index()
 
     # GET CUSTOMER DETAILS
 
