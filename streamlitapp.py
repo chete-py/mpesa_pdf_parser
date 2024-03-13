@@ -12,7 +12,8 @@ import base64
 st.set_page_config(page_icon="mpesa.jpg", page_title = 'Mpesa Statement Parser ', layout="wide")
 
 
-uploaded_file = st.file_uploader("Upload M-Pesa Statement",  type='pdf')
+with st.expander("Upload"):
+    uploaded_file = st.file_uploader("Upload M-Pesa Statement",  type='pdf')
 
 
 text_list = []  # List to store text from each page
