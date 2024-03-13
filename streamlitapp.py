@@ -108,7 +108,15 @@ if uploaded_file is not None:
     df['Day'] = df['Date'].dt.day_name()
     df['Month'] = df['Date'].dt.strftime('%B')
 
+    # Remove the time component
+    df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
+
     newdf = df[['Date', 'Month', 'Day', 'Time', 'Usage', 'Account Involved', 'Amount']]
+
+    newdf['Usage'] = newdf['Usage'].replace('Completed', 'Buy Bundles')
+    newdf['Account Involved'] = newdf['Account Involved'].replace('Completed', 'Safaricom Bundles')   
+
+
     finaldf = newdf[['Date', 'Time', 'Usage', 'Account Involved', 'Amount']]
 
     payments = newdf[newdf['Amount'] < 0]
@@ -172,7 +180,23 @@ if uploaded_file is not None:
     graph1 = receipts.groupby('Usage')['Amount'].sum().reset_index()
     graph2 = payments.groupby('Usage')['Amount'].sum().reset_index()
 
+    # GET CUSTOMER DETAILS
 
+    newpattern = re.compile(r"Customer(.*?)TRANSACTION TYPE", re.DOTALL)
+
+    # Find all matches in the massive string
+    newmatches = newpattern.findall(data)
+
+    #Convert list to string
+    new = ' '.join(map(str, newmatches))
+
+    customer  = new.replace('|', " _")
+
+    name = customer.split('_')[1]
+    phone = customer.split('_')[3]
+    period = customer.split('_')[7]
+
+    st.markdown(f"Name: {name} <br> Phone: {phone}  <br>Period: {period}", unsafe_allow_html=True)
 
     with card_container(key='global'):
         tab1, tab2, tab3= st.tabs(["📈 Money In", "📈Money Out", "🗃 Records"])
