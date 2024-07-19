@@ -11,6 +11,8 @@ import base64
 
 st.set_page_config(page_icon="mpesa.jpg", page_title = 'Mpesa Statement Parser ', layout="wide")
 
+text_list = []
+
 # Function to read and extract text from PDF
 def read_pdf(uploaded_file, password=None):
     try:
@@ -24,16 +26,13 @@ def read_pdf(uploaded_file, password=None):
         for page in doc:
             text_list.append(page.get_text())
         doc.close()
-        return text_list
-    except RuntimeError as e:
-        st.error(f"Error opening PDF: {e}")
-        return None
+        
 
 with st.expander("Upload"):
     uploaded_file = st.file_uploader("Upload M-Pesa Statement", type='pdf')
     password = st.text_input("Enter PDF password (if any):", type="password")
 
-text_list = []  # List to store text from each page
+  # List to store text from each page
 
 if uploaded_file is not None:
     text_list = read_pdf(uploaded_file, password)
