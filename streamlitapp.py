@@ -18,12 +18,36 @@ with st.expander("Upload"):
 
 text_list = []  # List to store text from each page
 
-if uploaded_file is not None:
-    doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
-    for page in doc:
-        text_list.append(page.get_text())
+#Function to read and extract text from PDF
+def read_pdf(uploaded_file, password=None):
+    try:
+        # Open the PDF with a password if provided
+        if password:
+            doc = fitz.open(stream=uploaded_file.read(), filetype="pdf", password=password)
+        else:
+            doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
 
-    doc.close()
+        text_list = []
+        for page in doc:
+            text_list.append(page.get_text())
+        doc.close()
+        return text_list
+    except RuntimeError as e:
+        st.error(f"Error opening PDF: {e}")
+        return None
+
+with st.expander("Upload"):
+    uploaded_file = st.file_uploader("Upload M-Pesa Statement", type='pdf')
+
+password = st.text_input("Enter PDF password (if any):", type="password")
+
+
+# if uploaded_file is not None:
+#     doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
+#     for page in doc:
+#         text_list.append(page.get_text())
+
+#     doc.close()
 
     # Join the text from all pages into a single string
     text = "\n".join(text_list)
