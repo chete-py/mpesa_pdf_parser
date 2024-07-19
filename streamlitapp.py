@@ -38,20 +38,20 @@ text_list = []  # List to store text from each page
 if uploaded_file is not None:
     text_list = read_pdf(uploaded_file, password)
 
-    if text_list:
-        # Join the text from all pages into a single string
-        text = "\n".join(text_list)
+    
+    # Join the text from all pages into a single string
+    text = "\n".join(text_list)
 
-        newdata = text.replace("   ", "")
-        data = newdata.replace("\n", "|")
+    newdata = text.replace("   ", "")
+    data = newdata.replace("\n", "|")
 
-        pd.set_option('display.max_rows', None)
+    pd.set_option('display.max_rows', None)
 
-        # Define a regex pattern to match dates and corresponding information up to the first full stop
-        pattern = re.compile(r'(\d{4}-\d{2}-\d{2})\s(.*?\.\d)', re.DOTALL)
+    # Define a regex pattern to match dates and corresponding information up to the first full stop
+    pattern = re.compile(r'(\d{4}-\d{2}-\d{2})\s(.*?\.\d)', re.DOTALL)
 
-        # Find all matches in the massive string
-        matches = pattern.findall(data)
+    # Find all matches in the massive string
+    matches = pattern.findall(data)
 
 # with st.expander("Upload"):
 #     uploaded_file = st.file_uploader("Upload M-Pesa Statement",  type='pdf')
