@@ -11,14 +11,7 @@ import base64
 
 st.set_page_config(page_icon="mpesa.jpg", page_title = 'Mpesa Statement Parser ', layout="wide")
 
-
-with st.expander("Upload"):
-    uploaded_file = st.file_uploader("Upload M-Pesa Statement",  type='pdf')
-
-
-text_list = []  # List to store text from each page
-
-#Function to read and extract text from PDF
+# Function to read and extract text from PDF
 def read_pdf(uploaded_file, password=None):
     try:
         # Open the PDF with a password if provided
@@ -38,31 +31,79 @@ def read_pdf(uploaded_file, password=None):
 
 with st.expander("Upload"):
     uploaded_file = st.file_uploader("Upload M-Pesa Statement", type='pdf')
-
     password = st.text_input("Enter PDF password (if any):", type="password")
 
+text_list = []  # List to store text from each page
 
-# if uploaded_file is not None:
-#     doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
-#     for page in doc:
-#         text_list.append(page.get_text())
+if uploaded_file is not None:
+    text_list = read_pdf(uploaded_file, password)
 
-#     doc.close()
+    if text_list:
+        # Join the text from all pages into a single string
+        text = "\n".join(text_list)
 
-    # Join the text from all pages into a single string
-    text = "\n".join(text_list)
+        newdata = text.replace("   ", "")
+        data = newdata.replace("\n", "|")
+
+        pd.set_option('display.max_rows', None)
+
+        # Define a regex pattern to match dates and corresponding information up to the first full stop
+        pattern = re.compile(r'(\d{4}-\d{2}-\d{2})\s(.*?\.\d)', re.DOTALL)
+
+        # Find all matches in the massive string
+        matches = pattern.findall(data)
+
+# with st.expander("Upload"):
+#     uploaded_file = st.file_uploader("Upload M-Pesa Statement",  type='pdf')
 
 
-    newdata = text.replace("   ", "")
-    data = newdata.replace("\n", "|")
+# text_list = []  # List to store text from each page
 
-    pd.set_option('display.max_rows', None)
+# #Function to read and extract text from PDF
+# def read_pdf(uploaded_file, password=None):
+#     try:
+#         # Open the PDF with a password if provided
+#         if password:
+#             doc = fitz.open(stream=uploaded_file.read(), filetype="pdf", password=password)
+#         else:
+#             doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
 
-    # Define a regex pattern to match dates and corresponding information up to the first full stop
-    pattern = re.compile(r'(\d{4}-\d{2}-\d{2})\s(.*?\.\d)', re.DOTALL)
+#         text_list = []
+#         for page in doc:
+#             text_list.append(page.get_text())
+#         doc.close()
+#         return text_list
+#     except RuntimeError as e:
+#         st.error(f"Error opening PDF: {e}")
+#         return None
 
-    # Find all matches in the massive string
-    matches = pattern.findall(data)
+# with st.expander("Upload"):
+#     uploaded_file = st.file_uploader("Upload M-Pesa Statement", type='pdf')
+
+#     password = st.text_input("Enter PDF password (if any):", type="password")
+
+
+# # if uploaded_file is not None:
+# #     doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
+# #     for page in doc:
+# #         text_list.append(page.get_text())
+
+# #     doc.close()
+
+#     # Join the text from all pages into a single string
+#     text = "\n".join(text_list)
+
+
+#     newdata = text.replace("   ", "")
+#     data = newdata.replace("\n", "|")
+
+#     pd.set_option('display.max_rows', None)
+
+#     # Define a regex pattern to match dates and corresponding information up to the first full stop
+#     pattern = re.compile(r'(\d{4}-\d{2}-\d{2})\s(.*?\.\d)', re.DOTALL)
+
+#     # Find all matches in the massive string
+#     matches = pattern.findall(data)
 
     df = pd.DataFrame(matches, columns=['Date', 'Information'])
 
