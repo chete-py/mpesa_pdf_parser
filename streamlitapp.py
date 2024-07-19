@@ -39,7 +39,7 @@ def read_pdf(uploaded_file, password=None):
 with st.expander("Upload"):
     uploaded_file = st.file_uploader("Upload M-Pesa Statement", type='pdf')
 
-password = st.text_input("Enter PDF password (if any):", type="password")
+    password = st.text_input("Enter PDF password (if any):", type="password")
 
 
 # if uploaded_file is not None:
